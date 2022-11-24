@@ -12,15 +12,19 @@ import {
 } from 'obsidian';
 
 import { GenericTextSuggester } from './genericTextSuggester';
+import { obliqueStrategies } from './obliqueStrategies';
+
+const DEFAULT_SETTINGS: RandomPromptSettings = {
+  notePath: undefined,
+  promptPrefix: '',
+  obliqueStrategies,
+};
 
 interface RandomPromptSettings {
   notePath?: string;
   promptPrefix: string;
+  obliqueStrategies: string[];
 }
-
-const DEFAULT_SETTINGS: RandomPromptSettings = {
-  promptPrefix: '',
-};
 
 // get random item from array
 const sample = <T>(array: T[]): T | undefined =>
@@ -39,6 +43,15 @@ export default class RandomPrompt extends Plugin {
         new RandomPromptModal(this.app, editor, this.settings).open();
       },
     });
+
+    // TODO: separate modal for strategies
+    // this.addCommand({
+    //   id: 'random-prompt-insert-strategy',
+    //   name: 'Insert random strategy',
+    //   editorCallback: (editor: Editor, view: MarkdownView) => {
+    //     new RandomPromptModal(this.app, editor, this.settings).open();
+    //   },
+    // });
 
     this.addSettingTab(new RandomPromptSettingTab(this.app, this));
   }
@@ -87,7 +100,11 @@ class RandomPromptModal extends Modal {
     this.shouldInsert = false;
 
     const { settings } = this;
-    const notePath = settings.notePath;
+    const { notePath } = settings;
+
+    // TODO: make notePath optional if settings.useObliqueStrategies = true
+    // if notePath exists and returns prompts (via await), cool
+    // otherwise just use obliqueStrategies
 
     // TODO: error modal
     if (!notePath) {
@@ -106,6 +123,8 @@ class RandomPromptModal extends Modal {
     const metadata = this.app.metadataCache.getFileCache(file);
     this.app.vault.cachedRead(file).then((text) => {
       const prompts = this.parsePrompts(text, metadata?.listItems || []);
+
+      // TODO: concat(obliqueStrategies) if settings.useObliqueStrategies = true
       const prompt = sample(prompts);
 
       if (!prompt) {

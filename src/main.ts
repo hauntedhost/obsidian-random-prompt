@@ -24,7 +24,7 @@ const DEFAULT_SETTINGS: RandomPromptSettings = {
 
 // get random item from array
 const sample = <T>(array: T[]): T | undefined =>
-  array.length > 0 ? array[(Math.random() * array.length) | 0] : undefined;
+  array[(Math.random() * array.length) | 0];
 
 export default class RandomPrompt extends Plugin {
   settings: RandomPromptSettings;

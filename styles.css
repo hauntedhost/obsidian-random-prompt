@@ -1,8 +1,30 @@
-/*
+/* settings */
+.random-prompt .search-input-container {
+  width: 100%;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.random-prompt .setting-item.search {
+  border-top: none;
+}
 
-If your plugin does not need CSS, delete this file.
+/* insert modal */
+.random-prompt.modal .modal-title {
+  font-weight: normal;
+}
 
-*/
+.random-prompt.modal .prompt-text {
+  border: none;
+  text-align: center;
+}
+
+.random-prompt.modal .setting-item {
+  border: none;
+}
+
+.random-prompt.modal .setting-item-control {
+  justify-content: flex-start;
+}
+
+.random-prompt.modal .setting-item-control button:hover {
+  cursor: pointer;
+}
